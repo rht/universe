@@ -18,7 +18,7 @@ def Monitored(directory, video_callable=None, force=False, resume=False,
             # TODO: Unvectorize all envs, not just the first
             self._first_unvectorized_env = wrappers.WeakUnvectorize(self, 0)
 
-            self._monitor = monitoring.Monitor(self._first_unvectorized_env)
+            self._monitor = monitoring.MonitorManager(self._first_unvectorized_env)
             self._monitor.start(directory, video_callable, force, resume,
                                 write_upon_reset, uid, mode)
 
