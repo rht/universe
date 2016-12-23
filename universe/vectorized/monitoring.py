@@ -5,8 +5,8 @@ from universe import vectorized
 
 logger = logging.getLogger(__name__)
 
-def Monitored(directory, video_callable=None, force=False, resume=False,
-              write_upon_reset=False, uid=None, mode=None):
+def Monitor(directory, video_callable=None, force=False, resume=False,
+            write_upon_reset=False, uid=None, mode=None):
     class Monitored(vectorized.Wrapper):
         def __init__(self, env):
             super(Monitored, self).__init__(env)

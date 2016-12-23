@@ -100,7 +100,7 @@ if __name__ == '__main__':
     env = wrappers.Logger(env)
 
     if args.monitor:
-        env = vectorized.Monitored('/tmp/vnc_random_agent', force=True)(env)
+        env = vectorized.Monitor('/tmp/vnc_random_agent', force=True)(env)
 
     env.configure(
         fps=args.fps,
