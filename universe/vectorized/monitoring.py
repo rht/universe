@@ -7,9 +7,9 @@ logger = logging.getLogger(__name__)
 
 def Monitor(directory, video_callable=None, force=False, resume=False,
             write_upon_reset=False, uid=None, mode=None):
-    class Monitored(vectorized.Wrapper):
+    class Monitor(vectorized.Wrapper):
         def __init__(self, env):
-            super(Monitored, self).__init__(env)
+            super(Monitor, self).__init__(env)
 
             # Circular dependencies :(
             from universe import wrappers
@@ -17,7 +17,7 @@ def Monitor(directory, video_callable=None, force=False, resume=False,
             # GC'd. They have a weak reference to us to avoid cycles.
             # TODO: Unvectorize all envs, not just the first
             self._first_unvectorized_env = wrappers.WeakUnvectorize(self, 0)
-
+    
             self._monitor = monitoring.MonitorManager(self._first_unvectorized_env)
             self._monitor.start(directory, video_callable, force, resume,
                                 write_upon_reset, uid, mode)
@@ -37,11 +37,11 @@ def Monitor(directory, video_callable=None, force=False, resume=False,
             return observation_n
 
         def _close(self):
-            super(Monitored, self)._close()
+            super(Monitor, self)._close()
             self._monitor.close()
 
         def set_monitor_mode(self, mode):
             logger.info("Setting the monitor mode is deprecated and will be removed soon")
             self._monitor._set_mode(mode)
 
-    return Monitored
+    return Monitor
