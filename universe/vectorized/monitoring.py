@@ -1,52 +1,47 @@
-import weakref
+import logging
 
 from gym import monitoring
+from universe import vectorized
 
-class Monitor(object):
-    def __init__(self, env_n):
-        """env_n is a collection of unvectorized envs"""
-        self.monitor_n = [monitoring.Monitor(env) for env in env_n]
+logger = logging.getLogger(__name__)
 
-    @property
-    def env(self):
-        # The real env is the first unwrapped env. Maybe we should
-        # maintain our own weakref rather than doing this.
-        return self.monitor_n[0].env.env
+def Monitored(directory, video_callable=None, force=False, resume=False,
+              write_upon_reset=False, uid=None, mode=None):
+    class Monitored(vectorized.Wrapper):
+        def __init__(self, env):
+            super(Monitored, self).__init__(env)
 
-    def start(self, directory, video_callable=None, seed_n=None, force=False,
-              resume=False, write_upon_reset=False, uid=None):
-        if seed_n is None:
-            seed_n = [None] * len(self.monitor_n)
-        # There's way to seed just one of the vectorized environments,
-        # so we have to do the seeding ourselves outside of the
-        # underlying monitor instances.
-        #
-        # The monitor will call the .seed method on the
-        # WeakUnvectorized env, which just returns rather than
-        # actually re-seeding the env.
-        self.env.seed(seed_n)
+            # Circular dependencies :(
+            from universe import wrappers
+            # We need to maintain pointers to these to avoid them being
+            # GC'd. They have a weak reference to us to avoid cycles.
+            # TODO: Unvectorize all envs, not just the first
+            self._first_unvectorized_env = wrappers.WeakUnvectorize(self, 0)
 
-        for i, monitor in enumerate(self.monitor_n):
-            # Only allow recording of video in first monitor
-            if i > 0:
-                video_callable = False
-            # Seed gets passed in but just recorded, not used.
-            monitor.start(directory=directory, video_callable=video_callable,
-                          force=force, resume=resume, write_upon_reset=write_upon_reset, uid=uid)
+            self._monitor = monitoring.Monitor(self._first_unvectorized_env)
+            self._monitor.start(directory, video_callable, force, resume,
+                                write_upon_reset, uid, mode)
 
-    def close(self, *args, **kwargs):
-        [monitor.close(*args, **kwargs) for monitor in self.monitor_n]
+        def _step(self, action_n):
+            self._monitor._before_step(action_n[0])
+            observation_n, reward_n, done_n, info = self.env.step(action_n)
+            done_n[0] = self._monitor._after_step(observation_n[0], reward_n[0], done_n[0], info)
 
-    def _before_reset(self):
-        return [monitor._before_reset() for monitor in self.monitor_n]
+            return observation_n, reward_n, done_n, info
 
-    def _after_reset(self, observation_n):
-        assert len(observation_n) == len(self.monitor_n)
-        return [monitor._after_reset(observation) for monitor, observation in zip(self.monitor_n, observation_n)]
+        def _reset(self):
+            self._monitor._before_reset()
+            observation_n = self.env.reset()
+            self._monitor._after_reset(observation_n[0])
 
-    def _before_step(self, action_n):
-        assert len(action_n) == len(self.monitor_n)
-        return [monitor._before_step(action) for monitor, action in zip(self.monitor_n, action_n)]
+            return observation_n
 
-    def _after_step(self, observation_n, reward_n, done_n, info):
-        return [monitor._after_step(o, r, d, i) for monitor, o, r, d, i in zip(self.monitor_n, observation_n, reward_n, done_n, info['n'])]
+        def _close(self):
+            super(Monitored, self)._close()
+            self._monitor.close()
+
+        def set_monitor_mode(self, mode):
+            logger.info("Setting the monitor mode is deprecated and will be removed soon")
+            self._monitor._set_mode(mode)
+
+    return Monitored
