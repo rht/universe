@@ -55,10 +55,12 @@ Take a vectorized environment with a batch of size 1 and turn it into an unvecto
         return self.env.seed([seed])[0]
 
 class WeakUnvectorize(Unvectorize):
-    def __init__(self, env):
+    def __init__(self, env, i):
+        # What is i? Seems not to be used anywhere?
         self._env_ref = weakref.ref(env)
         super(WeakUnvectorize, self).__init__(env)
         # WeakUnvectorize won't get configure called on it
+        self.i = i
 
     @property
     def env(self):
