@@ -11,6 +11,12 @@ from universe.envs import diagnostics
 from universe.runtimes import registration
 from universe.vncdriver import libvnc_session
 
+# The Go driver is the most supported one. So long as the Go driver
+# turns out to be easy to install, we'll continue forcing the Go
+# driver here.
+# noinspection PyUnresolvedReferences
+import go_vncdriver
+
 logger = logging.getLogger(__name__)
 extra_logger = logging.getLogger('universe.extra.'+__name__)
 
