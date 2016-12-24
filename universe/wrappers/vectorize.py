@@ -56,8 +56,6 @@ Take a vectorized environment with a batch of size 1 and turn it into an unvecto
 
 class WeakUnvectorize(Unvectorize):
     def __init__(self, env, i):
-        # What is i? Seems not to be used anywhere?
-        # TODO: Actually use the index to unvectorize
         self._env_ref = weakref.ref(env)
         super(WeakUnvectorize, self).__init__(env)
         # WeakUnvectorize won't get configure called on it
