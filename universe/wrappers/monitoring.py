@@ -1,13 +1,13 @@
 import logging
 
 from gym import monitoring
-from universe import vectorized
+from universe.vectorized import core  # Cannot import vectorized directly without inducing a cycle
 
 logger = logging.getLogger(__name__)
 
 def Monitor(directory, video_callable=None, force=False, resume=False,
             write_upon_reset=False, uid=None, mode=None):
-    class Monitor(vectorized.Wrapper):
+    class Monitor(core.Wrapper):
         def __init__(self, env):
             super(Monitor, self).__init__(env)
 

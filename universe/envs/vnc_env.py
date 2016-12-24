@@ -1,22 +1,13 @@
 import getpass
 import logging
 import os
-import socket
-import time
 import uuid
 
-# The Go driver is the most supported one. So long as the Go driver
-# turns out to be easy to install, we'll continue forcing the Go
-# driver here.
-import go_vncdriver
-
-from gym import scoreboard
-from gym.utils import reraise
-
 import universe
-from universe import error, remotes as remotes_module, pyprofile, rewarder, spaces, twisty, utils, vectorized, vncdriver
+from gym.utils import reraise
+from universe import error, pyprofile, rewarder, spaces, twisty, vectorized, vncdriver
+from universe import remotes as remotes_module
 from universe.envs import diagnostics
-from universe.remotes import healthcheck
 from universe.runtimes import registration
 from universe.vncdriver import libvnc_session
 
