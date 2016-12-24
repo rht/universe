@@ -17,7 +17,7 @@ def Monitor(directory, video_callable=None, force=False, resume=False,
             # GC'd. They have a weak reference to us to avoid cycles.
             # TODO: Unvectorize all envs, not just the first
             self._first_unvectorized_env = wrappers.WeakUnvectorize(self, 0)
-    
+
             self._monitor = monitoring.MonitorManager(self._first_unvectorized_env)
             self._monitor.start(directory, video_callable, force, resume,
                                 write_upon_reset, uid, mode)
