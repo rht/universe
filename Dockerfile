@@ -30,7 +30,7 @@ RUN ln -sf /usr/bin/pip3 /usr/local/bin/pip \
     && pip install -U pip
 
 # Install gym
-RUN pip install gym[all] # bump
+RUN pip install gym[all]
 
 # Get the faster VNC driver
 RUN pip install go-vncdriver>=0.4.0
