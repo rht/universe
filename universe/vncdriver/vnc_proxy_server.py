@@ -337,6 +337,19 @@ class VNCProxyServer(protocol.Protocol, object):
         (number_of_encodings,) = struct.unpack('!xH', block)
         self._handle_SetEncodings(number_of_encodings, [])
 
+    def _log_encodings(self, supported, unsupported):
+        if unsupported:
+            logger.info('[%s] Requested %s unsupported encodings: unsupported=%s supported=%s', self.id,
+                        len(unsupported), unsupported, supported)
+
+        logger.info("TB: {}".format(supported))
+
+        for encoding in supported:
+            encoding_name = constants.ENCODINGS_IDS_TO_NAMES[encoding]
+            logger.info(encoding_name)
+
+        logger.info("Running with the following settings. To replicate these settings from an agent, use the following: XXX")
+
     def _handle_SetEncodings(self, number_of_encodings, encodings):
         if number_of_encodings > 0:
             self.expect(self.recv_SetEncodings_encoding_type, 4, number_of_encodings-1, encodings)
@@ -349,8 +362,7 @@ class VNCProxyServer(protocol.Protocol, object):
                 else:
                     unsupported.append(encoding)
 
-            if unsupported:
-                logger.info('[%s] Requested %s unsupported encodings: unsupported=%s supported=%s', self.id, len(unsupported), unsupported, supported)
+            self._log_encodings(supported, unsupported)
 
             if self.add_pseudo_cursor_encoding and constants.PSEUDO_CURSOR_ENCODING not in supported:
                 logger.info('[%s] Add PSEUDO_CURSOR_ENCODING', self.id)
