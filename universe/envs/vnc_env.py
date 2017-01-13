@@ -105,6 +105,7 @@ class VNCEnv(vectorized.Env):
         'semantics.autoreset': True,
         'video.frames_per_second' : 60,
         'runtime.vectorized': True,
+        'configure.required': True,
     }
 
     def __init__(self, fps=None, probe_key=None):
@@ -328,6 +329,8 @@ class VNCEnv(vectorized.Env):
                 self._remotes_manager.close()
 
     def _reset(self):
+        if not self._started:
+            raise
         self._handle_connect()
 
         if self.rewarder_session:
