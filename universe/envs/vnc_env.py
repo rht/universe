@@ -329,8 +329,6 @@ class VNCEnv(vectorized.Env):
                 self._remotes_manager.close()
 
     def _reset(self):
-        if not self._started:
-            raise
         self._handle_connect()
 
         if self.rewarder_session:
