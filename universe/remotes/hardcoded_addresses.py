@@ -105,6 +105,8 @@ def parse_remotes(remotes):
             all_vnc = True
 
             remote, rewarder_port = remote.split('+')
+            if not re.match(r'^[0-9]+$', rewarder_port):
+                raise error.Error('Rewarder port must be an integer, not `{}`: {}'.format(rewarder_port, remotes))
             rewarder_port = int(rewarder_port)
         else:
             if all_vnc == True:
@@ -119,6 +121,8 @@ def parse_remotes(remotes):
             all_rewarder = True
 
             remote, vnc_port = remote.split(':')
+            if not re.match(r'^[0-9]+$', vnc_port):
+                raise error.Error('VNC port must be an integer, not `{}`: {}'.format(vnc_port, remotes))
             vnc_port = int(vnc_port)
         else:
             if all_rewarder == True:
@@ -129,6 +133,8 @@ def parse_remotes(remotes):
             all_rewarder = False
 
         host = remote
+        if not re.match(r'^[-a-zA-Z0-9\.\_]+$', host):
+            raise error.Error('Invalid hostname for remote: {}'.format(remotes))
 
         if rewarder_port is not None:
             rewarder_address = '{}:{}'.format(host, rewarder_port)
