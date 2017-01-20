@@ -69,7 +69,7 @@ Agents inside Docker
 If you're running your agent inside a Docker container, it can still create automatic remotes by connecting
 to the docker daemon on the host. To do this, mount the docker binary and socket inside the agent container like this:
 
-.. code: sh
+.. code:: sh
     docker run --privileged \
     		-v /usr/bin/docker:/usr/bin/docker \
     		-v /root/.docker:/root/.docker \
