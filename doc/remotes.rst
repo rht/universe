@@ -69,7 +69,7 @@ Agents inside Docker
 If you're running your agent inside a Docker container, it can still create automatic remotes by connecting
 to the docker daemon on the host. To do this, mount the docker binary and socket inside the agent container like this:
 
-```
+.. code: sh
     docker run --privileged \
     		-v /usr/bin/docker:/usr/bin/docker \
     		-v /root/.docker:/root/.docker \
@@ -77,8 +77,8 @@ to the docker daemon on the host. To do this, mount the docker binary and socket
             -e DOCKER_NET_HOST=172.17.0.1 \
             ...
             my/agent:latest
-```
-The Universe remote will use `$DOCKER_NET_HOST` when connecting to the VNC and rewarder ports.
+
+The Universe remote will use ``$DOCKER_NET_HOST`` when connecting to the VNC and rewarder ports.
 
 
 Manual remotes
