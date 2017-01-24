@@ -70,32 +70,12 @@ To get started, first install ``universe``:
 
     git clone https://github.com/openai/universe.git
     cd universe
+    sudo make deps  # sudo is omitted if on OSX+HomeBrew
     pip install -e .
 
-If this errors out, you may be missing some required packages. Here's
-the list of required packages we know about so far (please let us know
-if you had to install any others).
-
-On Ubuntu 16.04:
-
-.. code:: shell
-
-    sudo apt-get install golang libjpeg-turbo8-dev make
-
-On Ubuntu 14.04:
-
-.. code:: shell
-
-    sudo add-apt-repository ppa:ubuntu-lxc/lxd-stable  # for newer golang
-    sudo apt-get update
-    sudo apt-get install golang libjpeg-turbo8-dev make
-
-On OSX:
-
-.. code:: shell
-
-    xcode-select --install # if you haven't installed Command Line Tools
-    brew install golang libjpeg-turbo
+If this errors out, you may be missing some required packages. `make deps`
+installs `golang` and `libjpeg-turbo` (please let us know if you had to install
+any others).
 
 Install Docker
 ~~~~~~~~~~~~~~
