@@ -80,7 +80,6 @@ On Ubuntu 16.04:
 
 .. code:: shell
 
-    pip install numpy
     sudo apt-get install golang libjpeg-turbo8-dev make
 
 On Ubuntu 14.04:
@@ -99,11 +98,10 @@ You might need to install Command Line Tools by running:
 
     xcode-select --install
 
-Or ``numpy``, ``libjpeg-turbo`` and ``incremental`` packages:
+and the ``libjpeg-turbo`` package:
 
 .. code:: shell
 
-    pip install numpy incremental
     brew install golang libjpeg-turbo
 
 Install Docker
