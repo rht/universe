@@ -57,7 +57,7 @@ Installation
 Supported systems
 ~~~~~~~~~~~~~~~~~
 
-We currently support Linux and OSX running Python 2.7 or 3.5.
+We currently support Ubuntu Linux and OSX running Python 2.7 or 3.5.
 
 We recommend setting up a `conda environment <http://conda.pydata.org/docs/using/envs.html>`__
 before getting started, to keep all your Universe-related packages in the same place.
@@ -92,16 +92,9 @@ On Ubuntu 14.04:
 
 On OSX:
 
-You might need to install Command Line Tools by running:
-
 .. code:: shell
 
-    xcode-select --install
-
-and the ``libjpeg-turbo`` package:
-
-.. code:: shell
-
+    xcode-select --install # if you haven't installed Command Line Tools
     brew install golang libjpeg-turbo
 
 Install Docker
