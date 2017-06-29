@@ -66,7 +66,7 @@ class Worker(object):
     def _parent_send(self, msg):
         try:
             self.parent_conn.send(msg)
-        except IOError: # the worker is now dead
+        except IOError:  # the worker is now dead
             try:
                 res = self._parent_recv()
             except EOFError:
@@ -178,7 +178,7 @@ class Worker(object):
 def step_n(worker_n, action_n):
     accumulated = 0
     for worker in worker_n:
-        action_m = action_n[accumulated:accumulated+worker.m]
+        action_m = action_n[accumulated:accumulated + worker.m]
         worker.step_start(action_m)
         accumulated += worker.m
 
@@ -210,7 +210,6 @@ def reset_n(worker_n):
 def seed_n(worker_n, seed_n):
     accumulated = 0
     for worker in worker_n:
-        action_m = seed_n[accumulated:accumulated+worker.m]
         worker.seed_start(seed_n)
         accumulated += worker.m
 
@@ -290,7 +289,7 @@ class MultiprocessingEnv(core.Env):
         self.worker_n = []
         m = int((self.n + pool_size - 1) / pool_size)
         for i in range(0, self.n, m):
-            envs = self.envs[i:i+m]
+            envs = self.envs[i:i + m]
             self.worker_n.append(Worker(envs, i))
 
         if episode_limit is not None:
@@ -314,6 +313,7 @@ class MultiprocessingEnv(core.Env):
 
     def _close(self):
         close_n(self.worker_n)
+
 
 if __name__ == '__main__':
     env_n = make('Pong-v3')

@@ -35,6 +35,7 @@ def test_vnc_monitoring():
         results = gym.monitoring.load_results(temp)
         assert results['env_info']['env_id'] == 'gym-core.Pong-v3'
 
+
 if __name__ == '__main__':
     test_multiprocessing_env_monitoring()
     test_vnc_monitoring()
